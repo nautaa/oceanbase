@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: use sudo
       run: |
-        export PATH=$PATH:/usr/bin
+        apt update && apt install sudo
     - name: Maximize build space
       uses: easimon/maximize-build-space@master
       with:
