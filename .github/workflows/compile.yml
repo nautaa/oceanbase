@@ -31,7 +31,6 @@ jobs:
     - name: hhh
       run: |
         swapoff -a
-        sudo swapoff -a
 
     - name: Maximize build space
       uses: easimon/maximize-build-space@master
