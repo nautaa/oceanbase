@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-20.04
     container: ubuntu:20.04
     steps:
+      - name: sudo
+        run: |
+          apt-get update
+          apt-get install sudo
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
         with:
