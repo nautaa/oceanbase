@@ -14,14 +14,6 @@ jobs:
     runs-on: ubuntu-20.04
     container: ${{ matrix.image }}
     steps:
-    - name: use sudo
-      run: |
-        apt update && apt install sudo
-    - name: Maximize build space
-      uses: easimon/maximize-build-space@master
-      with:
-        root-reserve-mb: 512
-        swap-size-mb: 1024
     - uses: actions/checkout@v3
 
     - name: Install ubuntu environment
@@ -30,13 +22,18 @@ jobs:
       run: |
         export DEBIAN_FRONTEND=noninteractive
         apt-get update
-        apt-get install -y git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
+        apt-get install -y sudo git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
       
     - name: Install centos environment
       shell: bash
       if: ${{ startsWith(matrix.image, 'centos') }}
-      run: yum install -y git wget rpm* cpio make glibc-devel glibc-headers binutils m4
+      run: yum install -y sudo git wget rpm* cpio make glibc-devel glibc-headers binutils m4
 
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 512
+        swap-size-mb: 1024
     - name: Cache deps
       id: cache-deps
       uses: actions/cache@v3
