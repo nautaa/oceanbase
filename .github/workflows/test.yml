@@ -7,16 +7,13 @@ jobs:
     runs-on: ubuntu-20.04
     container: ubuntu:20.04
     steps:
-      - name: sudo
-        run: |
-          apt-get update
-          apt-get install sudo
       - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
+        run: |
+          df -h
+          rm -rf /opt/ghc
+          rm -rf /usr/local/lib/android
+          rm -rf /usr/share/dotnet
+          df -h
       - name: Checkout
         uses: actions/checkout@v2
 
