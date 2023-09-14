@@ -2,7 +2,7 @@ name: Compile
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, test ]
   pull_request:
     branches: [ master ]
 
@@ -14,6 +14,12 @@ jobs:
     runs-on: ubuntu-20.04
     container: ${{ matrix.image }}
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 512
+        swap-size-mb: 1024
+        remove-dotnet: 'true'
     - uses: actions/checkout@v3
 
     - name: Install ubuntu environment
