@@ -28,6 +28,10 @@ jobs:
       shell: bash
       if: ${{ startsWith(matrix.image, 'centos') }}
       run: yum install -y sudo git wget rpm* cpio make glibc-devel glibc-headers binutils m4
+    - name: hhh
+      run: |
+        swapoff -a
+        sudo swapoff -a
 
     - name: Maximize build space
       uses: easimon/maximize-build-space@master
