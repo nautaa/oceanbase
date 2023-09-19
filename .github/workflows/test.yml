@@ -1,22 +1,59 @@
-name: My build action requiring more space
-on: push
+name: Compile
+
+on:
+  push:
+    branches: [ master, test ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
-    name: Build my artifact
+    strategy:
+      matrix: 
+        image: ['centos:7']
     runs-on: ubuntu-20.04
+    container: ${{ matrix.image }}
     steps:
-      - name: Maximize build space
-        run: |
-          sudo df -h
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /usr/share/dotnet
-          sudo df -h
-      - name: Checkout
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-      - name: Build
-        run: |
-          echo "Free space:"
-          df -h
+    - name: Install ubuntu environment
+      shell: bash
+      if: ${{ startsWith(matrix.image, 'ubuntu') }}
+      run: |
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update
+        apt-get install -y git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
+      
+    - name: Install centos environment
+      shell: bash
+      if: ${{ startsWith(matrix.image, 'centos') }}
+      run: yum install -y sudo git wget rpm* cpio make glibc-devel glibc-headers binutils m4
+
+    - name: Cache deps
+      id: cache-deps
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-deps
+      with:
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-el7.x86_64-${{ hashFiles('deps/init/oceanbase.el7.x86_64.deps') }}
+        path: deps/3rd
+        enableCrossOsArchive: true
+
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+    
+    - name: Build init
+      if: steps.cache-deps.outputs.cache-hit != 'true'
+      run: bash build.sh init
+      
+    - name: Build project
+      shell: bash
+      run: |
+        rm -rf build_debug 
+        ${SCCACHE_PATH} --show-stats
+        bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        cd build_debug && make -j4 && cd -
+        ${SCCACHE_PATH} --show-stats
+        df -h
+      env:
+        SCCACHE_GHA_ENABLED: "true"
