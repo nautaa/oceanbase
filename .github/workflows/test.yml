@@ -51,10 +51,8 @@ jobs:
       shell: bash
       run: |
         rm -rf build_debug 
-        ${SCCACHE_PATH} --show-stats
         bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         cd build_debug && make -j4 && cd -
-        ${SCCACHE_PATH} --show-stats
         df -h
       env:
         SCCACHE_GHA_ENABLED: "true"
