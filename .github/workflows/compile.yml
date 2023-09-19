@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix: 
-        image: ['ubuntu:20.04', 'centos:7']
+        image: ['centos:7']
     runs-on: ubuntu-20.04
     container: ${{ matrix.image }}
     steps:
@@ -22,20 +22,13 @@ jobs:
       run: |
         export DEBIAN_FRONTEND=noninteractive
         apt-get update
-        apt-get install -y sudo git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
+        apt-get install -y git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
       
     - name: Install centos environment
       shell: bash
       if: ${{ startsWith(matrix.image, 'centos') }}
       run: yum install -y sudo git wget rpm* cpio make glibc-devel glibc-headers binutils m4
 
-    - name: Maximize build space
-      uses: easimon/maximize-build-space@master
-      with:
-        root-reserve-mb: 2048
-        swap-size-mb: 1024
-        remove-dotnet: 'true'
-        remove-android: 'true'
     - name: Cache deps
       id: cache-deps
       uses: actions/cache@v3
@@ -46,17 +39,10 @@ jobs:
         path: deps/3rd
         enableCrossOsArchive: true
 
-    - name: Cache build
-      id: cache-build
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-build
+    - name: Run sccache-cache
+      uses: mozilla-actions/sccache-action@v0.0.3
       with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ matrix.image }}-el7.x86_64-${{ github.ref_name }}
-        path: ~/.ccache
-        enableCrossOsArchive: false
-        restore-keys: |
-          ${{ runner.os }}-${{ env.cache-name }}-${{ matrix.image }}-el7.x86_64
+        version: "v0.5.2"
     
     - name: Build init
       if: steps.cache-deps.outputs.cache-hit != 'true'
@@ -65,12 +51,10 @@ jobs:
     - name: Build project
       shell: bash
       run: |
-        rm -rf build_debug
-        export CCACHE_LOGFILE=$PWD/ccache.log
-        deps/3rd/usr/local/oceanbase/devtools/bin/ccache -z
-        bash build.sh debug -DOB_USE_CCACHE=ON
+        rm -rf build_debug 
+        ${SCCACHE_PATH} --show-stats
+        bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
         cd build_debug && make -j4 && cd -
-        deps/3rd/usr/local/oceanbase/devtools/bin/ccache -s
-        
-    - if: ${{ runner.debug }}
-      run: cat $PWD/ccache.log
+        ${SCCACHE_PATH} --show-stats
+      env:
+        SCCACHE_GHA_ENABLED: "true"
