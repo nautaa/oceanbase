@@ -38,13 +38,14 @@ jobs:
         key: ${{ runner.os }}-build-${{ env.cache-name }}-el7.x86_64-${{ hashFiles('deps/init/oceanbase.el7.x86_64.deps') }}
         path: deps/3rd
         enableCrossOsArchive: true
-
-    - name: ccache
-      uses: hendrikmuhs/ccache-action@v1.2
     
     - name: Build init
       if: steps.cache-deps.outputs.cache-hit != 'true'
-      run: bash build.sh init
+      run: |
+        bash build.sh init
+        echo "$PWD/deps/3rd/usr/local/oceanbase/devtools/bin/" >> $GITHUB_PATH
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2
       
     - name: Build project
       shell: bash
