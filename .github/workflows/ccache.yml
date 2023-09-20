@@ -2,7 +2,7 @@ name: ccache Compile
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, test ]
   pull_request:
     branches: [ master ]
 
