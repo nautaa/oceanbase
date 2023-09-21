@@ -63,6 +63,7 @@ jobs:
         rm -rf .git/
         export CCACHE_LOGFILE=$PWD/ccache.log
         deps/3rd/usr/local/oceanbase/devtools/bin/ccache -z
+        deps/3rd/usr/local/oceanbase/devtools/bin/ccache --set-config=compression=true
         bash build.sh debug -DOB_USE_CCACHE=ON
         cd build_debug && make -j4 && cd -
         deps/3rd/usr/local/oceanbase/devtools/bin/ccache -s
