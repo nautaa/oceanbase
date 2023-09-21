@@ -56,6 +56,6 @@ jobs:
         bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         cd build_debug && make -j4 && cd -
         df -h
-        du -sh ${{ github.workspace }}/.ccache/
+        du -sh /__w/oceanbase/oceanbase/.ccache
       env:
         SCCACHE_GHA_ENABLED: "true"
