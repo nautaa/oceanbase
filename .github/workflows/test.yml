@@ -46,6 +46,8 @@ jobs:
         echo "$PWD/deps/3rd/usr/local/oceanbase/devtools/bin/" >> $GITHUB_PATH
     - name: ccache
       uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        max-size: 10G
       
     - name: Build project
       shell: bash
@@ -54,5 +56,6 @@ jobs:
         bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         cd build_debug && make -j4 && cd -
         df -h
+        du -sh ~/.ccache/
       env:
         SCCACHE_GHA_ENABLED: "true"
