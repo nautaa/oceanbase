@@ -59,7 +59,6 @@ jobs:
       shell: bash
       run: |
         df -h
-        du -sh ~/.ccache
         rm -rf build_debug
         rm -rf .git/
         export CCACHE_LOGFILE=$PWD/ccache.log
