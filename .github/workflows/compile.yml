@@ -51,12 +51,12 @@ jobs:
     - name: Build project
       shell: bash
       run: |
+        ls -la ~/
         rm -rf build_debug 
         ${SCCACHE_PATH} --show-stats
         bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
         cd build_debug && make -j4 && cd -
         ${SCCACHE_PATH} --show-stats
         df -h
-        du -sh ~/.cache/sccache
       env:
         SCCACHE_GHA_ENABLED: "true"
