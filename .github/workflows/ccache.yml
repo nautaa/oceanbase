@@ -60,6 +60,7 @@ jobs:
       run: |
         df -h
         rm -rf build_debug
+        rm -rf .git/
         export CCACHE_LOGFILE=$PWD/ccache.log
         deps/3rd/usr/local/oceanbase/devtools/bin/ccache -z
         bash build.sh debug -DOB_USE_CCACHE=ON
