@@ -67,6 +67,7 @@ jobs:
         cd build_debug && make -j4 && cd -
         deps/3rd/usr/local/oceanbase/devtools/bin/ccache -s
         df -h
+        du -sh ~/.ccache
         
     - if: ${{ runner.debug }}
       run: cat $PWD/ccache.log
