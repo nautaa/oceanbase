@@ -45,7 +45,10 @@ jobs:
 
     - name: Build init
       if: steps.cache-deps.outputs.cache-hit != 'true'
-      run: bash build.sh init
+      run: |
+        pwd
+        cd ${{github.workspace}}
+        bash build.sh init
       
     - name: Build project
       shell: bash
