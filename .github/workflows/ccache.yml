@@ -1,4 +1,4 @@
-name: ccache Compile and code ql
+name: code ql
 
 on:
   push:
@@ -39,6 +39,11 @@ jobs:
         path: deps/3rd
         enableCrossOsArchive: true
 
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: cpp
+
     - name: Cache build
       id: cache-build
       uses: actions/cache@v3
@@ -61,19 +66,9 @@ jobs:
         df -h
         rm -rf build_debug
         rm -rf .git/
-        export CCACHE_LOGFILE=$PWD/ccache.log
-        deps/3rd/usr/local/oceanbase/devtools/bin/ccache -z
-        deps/3rd/usr/local/oceanbase/devtools/bin/ccache --set-config=compression=true
-        bash build.sh debug -DOB_USE_CCACHE=ON
+        bash build.sh debug
         cd build_debug && make -j4 && cd -
-        deps/3rd/usr/local/oceanbase/devtools/bin/ccache -s
         df -h
-        du -sh ~/.ccache
-        
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: cpp
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
