@@ -1,4 +1,4 @@
-name: ccache Compile
+name: ccache Compile and code ql
 
 on:
   push:
@@ -70,5 +70,5 @@ jobs:
         df -h
         du -sh ~/.ccache
         
-    - if: ${{ runner.debug }}
-      run: cat $PWD/ccache.log
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
