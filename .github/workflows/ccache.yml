@@ -10,7 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v3
     - name: Maximize build space
       uses: easimon/maximize-build-space@master
       with:
@@ -27,7 +26,7 @@ jobs:
         df -h
         sudo apt-get update
         sudo apt-get install -y git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
-      
+    - uses: actions/checkout@v3
     - name: Cache deps
       id: cache-deps
       uses: actions/cache@v3
