@@ -52,7 +52,9 @@ jobs:
       run: |
         df -h
         rm -rf build_debug
-        rm -rf .git/
+        rm -rf .git
+        pwd
+        cd ${{github.workspace}}
         bash build.sh debug
         cd build_debug && make -j4 && cd -
         df -h
