@@ -2,7 +2,7 @@ name: Compile
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, ccache_test ]
   pull_request:
     branches: [ master ]
 
@@ -27,12 +27,19 @@ jobs:
         path: deps/3rd
     
     - name: Build init
-      run: bash build.sh init
+      run: |
+        echo "${{github.workspace}}/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
+        bash build.sh init
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        max-size: 10G
   
     - name: Build project
       shell: bash
       run: |
-        bash build.sh debug
+        bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         cd build_debug && make -j4
   
   ubuntu-build:
@@ -57,10 +64,17 @@ jobs:
         path: deps/3rd
     
     - name: Build init
-      run: bash build.sh init
-      
+      run: |
+        echo "${{github.workspace}}/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
+        bash build.sh init
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        max-size: 10G
+  
     - name: Build project
       shell: bash
       run: |
-        bash build.sh debug
+        bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         cd build_debug && make -j4
