@@ -28,7 +28,8 @@ jobs:
     
     - uses: ./.github/workflows/build_base
       with:
-        SAVE_CCACHE: ${{github.event_name == 'push'}}
+        save_cache: ${{github.event_name == 'push'}}
+        os: 'centos7'
   
   ubuntu-build:
     runs-on: ubuntu-22.04
@@ -53,4 +54,5 @@ jobs:
     
     - uses: ./.github/workflows/build_base
       with:
-        SAVE_CCACHE: ${{github.event_name == 'push'}}
+        save_cache: ${{github.event_name == 'push'}}
+        key: 'ubuntu22'
