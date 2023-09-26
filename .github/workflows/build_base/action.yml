@@ -10,11 +10,13 @@ runs:
   using: "composite"
   steps:
     - name: Build init
+      shell: bash
       run: |
         bash build.sh init
         echo "$GITHUB_WORKSPACE/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
 
     - name: Setup ccache
+      shell: bash
       uses: hendrikmuhs/ccache-action@v1.2
       with:
         max-size: 10G
