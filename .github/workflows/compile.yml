@@ -53,4 +53,4 @@ jobs:
     
     - uses: ./.github/workflows/build_base
       with:
-        SAVE_CCACHE: $${{github.event_name}} == 'push'
+        SAVE_CCACHE: ${{github.event_name == 'push'}}
