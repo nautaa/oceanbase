@@ -29,8 +29,8 @@ jobs:
     - name: Build init
       run: |
         bash build.sh init
-        echo ${{github.workspace}}
-        echo "${{github.workspace}}/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
+        echo $GITHUB_WORKSPACE
+        echo "$GITHUB_WORKSPACE/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
         echo $GITHUB_PATH
         ccache -h
 
