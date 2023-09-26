@@ -26,7 +26,8 @@ jobs:
         key: ${{ runner.os }}-build-${{ env.cache-name }}-el7.x86_64-${{ hashFiles('deps/init/oceanbase.el7.x86_64.deps') }}
         path: deps/3rd
     
-    - uses: ./.github/workflows/build_base
+    - name: Build
+      uses: ./.github/workflows/build_base
       with:
         save_cache: ${{github.event_name == 'push'}}
         os: 'centos7'
@@ -52,7 +53,8 @@ jobs:
         key: ${{ runner.os }}-build-${{ env.cache-name }}-el9.x86_64-${{ hashFiles('deps/init/oceanbase.el9.x86_64.deps') }}
         path: deps/3rd
     
-    - uses: ./.github/workflows/build_base
+    - name: Build
+      uses: ./.github/workflows/build_base
       with:
         save_cache: ${{github.event_name == 'push'}}
-        key: 'ubuntu22'
+        os: 'ubuntu22'
