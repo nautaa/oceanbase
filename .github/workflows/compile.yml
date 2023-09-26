@@ -30,7 +30,7 @@ jobs:
       run: |
         bash build.sh init
         echo "${{github.workspace}}/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
-        which ccache
+        ccache -h
 
 
     - name: Setup ccache
