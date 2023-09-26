@@ -19,7 +19,7 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
         remove-docker-images: 'true'
-        build-mount-path: $HOME
+        build-mount-path: /
     - name: Install ubuntu environment
       shell: bash
       run: |
