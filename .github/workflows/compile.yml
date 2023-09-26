@@ -27,8 +27,8 @@ jobs:
         path: deps/3rd
     
     - uses: ./actions/.github/actions/build_base
-        with:
-          SAVE_CCACHE: $${{github.event_name}} == 'push'
+      with:
+        SAVE_CCACHE: $${{github.event_name}} == 'push'
   
   ubuntu-build:
     runs-on: ubuntu-22.04
