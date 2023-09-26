@@ -26,7 +26,7 @@ jobs:
         key: ${{ runner.os }}-build-${{ env.cache-name }}-el7.x86_64-${{ hashFiles('deps/init/oceanbase.el7.x86_64.deps') }}
         path: deps/3rd
     
-    - uses: ./actions/.github/actions/build_base
+    - uses: ./.github/workflows/build_base
       with:
         SAVE_CCACHE: $${{github.event_name}} == 'push'
   
@@ -51,6 +51,6 @@ jobs:
         key: ${{ runner.os }}-build-${{ env.cache-name }}-el9.x86_64-${{ hashFiles('deps/init/oceanbase.el9.x86_64.deps') }}
         path: deps/3rd
     
-    - uses: ./actions/.github/actions/build_base
+    - uses: ./.github/workflows/build_base
       with:
         SAVE_CCACHE: $${{github.event_name}} == 'push'
