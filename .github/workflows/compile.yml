@@ -28,7 +28,7 @@ jobs:
     
     - uses: ./.github/workflows/build_base
       with:
-        SAVE_CCACHE: $${{github.event_name}} == 'push'
+        SAVE_CCACHE: ${{github.event_name == 'push'}}
   
   ubuntu-build:
     runs-on: ubuntu-22.04
