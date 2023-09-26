@@ -1,10 +1,12 @@
 name: "Build base"
 
 inputs:
-  SAVE_CCACHE:
+  save_cache:
     description: 'whether to save ccache to github action cache'
     required: true
-    default: true
+  os:
+    description: 'which runner os to run this build action'
+    required: true
 
 runs:
   using: "composite"
@@ -19,7 +21,8 @@ runs:
       uses: hendrikmuhs/ccache-action@v1.2
       with:
         max-size: 10G
-        save: ${{inputs.SAVE_CCACHE}}
+        save: ${{inputs.save_cache}}
+        key: ${{inputs.os}}
   
     - name: Build project
       shell: bash
