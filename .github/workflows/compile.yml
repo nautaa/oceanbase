@@ -26,23 +26,9 @@ jobs:
         key: ${{ runner.os }}-build-${{ env.cache-name }}-el7.x86_64-${{ hashFiles('deps/init/oceanbase.el7.x86_64.deps') }}
         path: deps/3rd
     
-    - name: Build init
-      run: |
-        bash build.sh init
-        echo $GITHUB_WORKSPACE
-        echo "$GITHUB_WORKSPACE/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
-        echo $GITHUB_PATH
-
-    - name: Setup ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        max-size: 10G
-  
-    - name: Build project
-      shell: bash
-      run: |
-        bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-        cd build_debug && make -j4
+    - uses: ./actions/.github/actions/build_base
+        with:
+          SAVE_CCACHE: $${{github.event_name}} == 'push'
   
   ubuntu-build:
     runs-on: ubuntu-22.04
@@ -65,18 +51,6 @@ jobs:
         key: ${{ runner.os }}-build-${{ env.cache-name }}-el9.x86_64-${{ hashFiles('deps/init/oceanbase.el9.x86_64.deps') }}
         path: deps/3rd
     
-    - name: Build init
-      run: |
-        echo "${{github.workspace}}/deps/3rd/usr/local/oceanbase/devtools/bin" >> $GITHUB_PATH
-        bash build.sh init
-
-    - name: Setup ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        max-size: 10G
-  
-    - name: Build project
-      shell: bash
-      run: |
-        bash build.sh debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-        cd build_debug && make -j4
+    - uses: ./actions/.github/actions/build_base
+        with:
+          SAVE_CCACHE: $${{github.event_name}} == 'push'
