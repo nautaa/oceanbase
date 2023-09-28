@@ -1,0 +1,67 @@
+name: code ql
+
+on:
+  push:
+    branches: [ master, test1 ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 20480
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-docker-images: 'true'
+    - name: Install ubuntu environment
+      shell: bash
+      run: |
+        echo $HOME
+        export DEBIAN_FRONTEND=noninteractive
+        df -h
+        sudo apt-get update
+        sudo apt-get install -y git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
+    - uses: actions/checkout@v3
+    - name: Cache deps
+      id: cache-deps
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-deps
+      with:
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-el7.x86_64-${{ hashFiles('deps/init/oceanbase.el7.x86_64.deps') }}
+        path: deps/3rd
+        enableCrossOsArchive: true
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: cpp
+
+    - name: Build init
+      if: steps.cache-deps.outputs.cache-hit != 'true'
+      run: |
+        pwd
+        cd ${{github.workspace}}
+        bash build.sh init
+      
+    - name: Build project
+      shell: bash
+      run: |
+        df -h
+        rm -rf build_debug
+        rm -rf .git
+        pwd
+        cd ${{github.workspace}}
+        bash build.sh debug
+        cd build_debug && make -j4 && cd -
+        df -h
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:cpp"
