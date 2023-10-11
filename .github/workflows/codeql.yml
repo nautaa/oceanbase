@@ -2,9 +2,7 @@ name: CodeQL
 
 on:
   push:
-    branches: [ master, new_codeql ]
-  schedule:
-    - cron: "0 0 * * 1" # every Monday
+    branches: [ new_codeql ]
 
 jobs:
   codeql:
