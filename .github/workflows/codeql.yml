@@ -42,14 +42,13 @@ jobs:
 
     - name: Build init
       run: |
-        bash build.sh --init debug_no_unity
+        bash build.sh debug_no_unity --init
       
     - name: Build project
       shell: bash
       run: |
-        rm -rf build_debug
-        bash build.sh debug
-        cd build_debug && make -j4 && cd -
+        rm -rf build_debug_no_unity/
+        cd build_debug_no_unity/ && make -j4 && cd -
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
