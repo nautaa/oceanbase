@@ -38,6 +38,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: cpp
+        debug: true
 
     - name: Build init
       run: |
@@ -47,7 +48,7 @@ jobs:
       shell: bash
       run: |
         rm -rf build_debug
-        bash build.sh debug
+        bash build.sh debug debug_no_unity
         cd build_debug && make -j4 && cd -
 
     - name: Perform CodeQL Analysis
