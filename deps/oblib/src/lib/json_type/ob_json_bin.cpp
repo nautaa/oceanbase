@@ -14,6 +14,7 @@
 #include "common/object/ob_obj_type.h"
 #include "ob_json_bin.h"
 #include "ob_json_tree.h"
+#include <cmath>
 
 namespace oceanbase {
 namespace common {
