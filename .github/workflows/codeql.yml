@@ -1,6 +1,8 @@
 name: CodeQL
 
 on:
+  push:
+    branches: [ master, codeql ]
   schedule:
     - cron: "0 0 * * 1" # every Monday
 
@@ -39,12 +41,13 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: cpp
+        debug: true
 
     - name: Build project
       shell: bash
       run: |
-        rm -rf build_debug
-        bash build.sh debug --init --make -j3
+        rm -rf build_debug_no_unity
+        bash build.sh debug_no_unity --init --make -j3
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
