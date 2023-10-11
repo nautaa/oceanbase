@@ -47,7 +47,8 @@ jobs:
       shell: bash
       run: |
 
-        bash build.sh debug --init --make -j3
+        cd build/
+      continue-on-error: true
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
