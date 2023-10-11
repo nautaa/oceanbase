@@ -13,7 +13,7 @@
 // This file contains implementation support for the json parse abstraction.
 #define USING_LOG_PREFIX SQL
 #include "ob_json_parse.h"
-
+#include <cmath>
 namespace oceanbase {
 namespace common {
 
