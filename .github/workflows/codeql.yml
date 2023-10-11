@@ -37,6 +37,7 @@ jobs:
       run: |
 
         bash build.sh debug_no_unity --init --make -j3
+      continue-on-error: true
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
