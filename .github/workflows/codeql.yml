@@ -42,13 +42,13 @@ jobs:
 
     - name: Build init
       run: |
-        bash build.sh init
+        bash build.sh --init debug_no_unity
       
     - name: Build project
       shell: bash
       run: |
         rm -rf build_debug
-        bash build.sh debug debug_no_unity
+        bash build.sh debug
         cd build_debug && make -j4 && cd -
 
     - name: Perform CodeQL Analysis
