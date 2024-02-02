@@ -2,7 +2,7 @@ name: Compile
 
 on:
   push:
-    branches: [ master, logminer_42x ]
+    branches: [ master, oblogminer_42x ]
   pull_request:
     branches: [ master ]
 
