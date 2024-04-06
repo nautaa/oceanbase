@@ -1,6 +1,7 @@
 name: Compile
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master, develop, 4.2.x ]
   pull_request:
