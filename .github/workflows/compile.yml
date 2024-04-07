@@ -66,6 +66,7 @@ jobs:
     - name: Build project
       shell: bash
       run: |
+        ldd --version
         rm -rf build_debug
         export CCACHE_LOGFILE=$PWD/ccache.log
         deps/3rd/usr/local/oceanbase/devtools/bin/ccache -z
