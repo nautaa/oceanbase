@@ -9,11 +9,7 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix: 
-        image: ['ubuntu:20.04']
     runs-on: ubuntu-20.04
-    container: ${{ matrix.image }}
     steps:
     - uses: actions/checkout@v3
     - name: Free Disk Space
@@ -34,16 +30,10 @@ jobs:
 
     - name: Install ubuntu environment
       shell: bash
-      if: ${{ startsWith(matrix.image, 'ubuntu') }}
       run: |
         export DEBIAN_FRONTEND=noninteractive
         apt-get update
         apt-get install -y git wget rpm rpm2cpio cpio make build-essential binutils m4 libtool-bin libncurses5
-      
-    - name: Install centos environment
-      shell: bash
-      if: ${{ startsWith(matrix.image, 'centos') }}
-      run: yum install -y git wget rpm* cpio make glibc-devel glibc-headers binutils m4
 
     - name: Cache deps
       id: cache-deps
