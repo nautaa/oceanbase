@@ -1,0 +1,12 @@
+select hello_repeat(1);
+hello_repeat(1)
+Hello, OceanBase!
+select hello_repeat(10);
+hello_repeat(10)
+Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!
+select hello_repeat(null);
+hello_repeat(null)
+NULL
+select hello_repeat(5);
+hello_repeat(5)
+Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!Hello, OceanBase!

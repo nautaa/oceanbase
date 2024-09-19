@@ -1,0 +1,4 @@
+select hello_repeat(1);
+select hello_repeat(10);
+select hello_repeat(null);
+select hello_repeat(5);
