@@ -56,6 +56,16 @@ int ObMVPrinter::print_mv_operators(ObIAllocator &str_alloc,
   } else if (OB_FAIL(operators.prepare_allocate(dml_stmts.count()))) {
     LOG_WARN("failed to prepare allocate ObSqlString arrays", K(ret), K(dml_stmts.count()));
   } else {
+    int64_t dop = 8;
+    ObGlobalHint &global_hint = mv_def_stmt_.get_query_ctx()->get_query_hint_for_update().get_global_hint();
+    global_hint.merge_parallel_dml_hint(ObPDMLOption::ENABLE);
+    global_hint.merge_parallel_hint(dop);
+    global_hint.merge_dml_parallel_hint(dop);
+    ObDirectLoadHint direct_load_hint;
+    direct_load_hint.has_direct_ = true;
+    direct_load_hint.need_sort_ = true;
+    direct_load_hint.load_method_ = ObDirectLoadHint::INC;
+    global_hint.merge_direct_load_hint(direct_load_hint);
     ObObjPrintParams obj_print_params(mv_def_stmt_.get_query_ctx()->get_timezone_info());
     obj_print_params.print_origin_stmt_ = true;
     obj_print_params.not_print_internal_catalog_ = true;
